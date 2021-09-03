@@ -6,9 +6,13 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 
 import java.awt.*;
+import java.text.DecimalFormat;
 
 public class ShowStockEmbed
 {
+    // format decimals to 2
+    private final DecimalFormat df = new DecimalFormat("0.00");
+
     public MessageEmbed get(Stock stock)
     {
         EmbedBuilder embedBuilder = new EmbedBuilder();
@@ -25,6 +29,11 @@ public class ShowStockEmbed
         float highDif = current.high - yesterday.high;
         float lowDif = current.low - yesterday.low;
         long volumeDif = current.volume - yesterday.volume;
+
+        openDif = toTwoDecimals(openDif);
+        closeDif=toTwoDecimals(closeDif);
+        highDif=toTwoDecimals(highDif);
+        lowDif=toTwoDecimals(lowDif);
 
 
         String positiveStatement = "Has Risen by ";
@@ -56,5 +65,10 @@ public class ShowStockEmbed
 
         embedBuilder.addField("Data", sb.toString(), false);
         return embedBuilder.build();
+    }
+
+    private float toTwoDecimals(float n)
+    {
+        return ((float) Math.round(n*100))/100;
     }
 }

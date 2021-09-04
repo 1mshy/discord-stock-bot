@@ -25,7 +25,8 @@ public class DailyListManager extends ListenerAdapter
             return;
 
         String channelId = event.getChannel().getId();
-        JsonObject obj = channelManager.getData();
+        JsonObject obj = channelManager.getChannelData();
+
 
         if (msgArr[0].equals(Main.BOTCHAR + "add"))
         {
@@ -43,7 +44,6 @@ public class DailyListManager extends ListenerAdapter
             stockList.add(msgArr[1]);
 
             channelManager.addToList(channelObject);
-
         }
     }
 }

@@ -1,79 +1,111 @@
 package com.imshy.Discord;
 
 import com.google.gson.*;
-import com.imshy.Main;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.Objects;
+import java.util.Scanner;
 
 public class ChannelManager
 {
 
-    private final String FOLDERNAME = "Extra";
+    private final String FOLDERNAME = "Extras";
+    // returns the path of the jar file
+    // data final name
+    private final String DATANAME = "data.json";
+
+    private final String currentPathUrl = this.getClass().getProtectionDomain().getCodeSource().getLocation().getPath();
+
+    // combining the current execution path with the name of the folder
+    private final String extraPathUrl = currentPathUrl + FOLDERNAME + '/';
+    // Data url
+    private final String DataUrl = extraPathUrl + DATANAME;
 
     public ChannelManager()
     {
-
-    }
-
-    private void setupFolder() throws IOException
-    {
-        // returns the path of the jar file
-        String pathUrl = this.getClass().getProtectionDomain().getCodeSource().getLocation().getPath();
-        // adding the newly wanted folder name
-        pathUrl += FOLDERNAME + '/';
-        // creating path object
-        Path path = Path.of(pathUrl);
-        // creating the directory
-        Files.createDirectories(path);
-    }
-
-    public JsonObject getData()
-    {
-        InputStream stream = Main.class.getResourceAsStream("Storage/channelData.json");
-        StringBuilder sb = new StringBuilder();
-        String input;
-        BufferedReader br = new BufferedReader(new InputStreamReader(Objects.requireNonNull(stream)));
-
+        System.out.println("initialized");
         try
         {
+            setupFolder(); // 1
 
-            while ((input = br.readLine()) != null)
-            {
-                sb.append(input);
-            }
+
+            setupData();// 2
         } catch (IOException e)
         {
             e.printStackTrace();
         }
 
-        return new JsonParser().parse(sb.toString()).getAsJsonObject();
-
     }
 
-
-
-    private void writeData(String data) throws IOException
+    private void setupFolder() throws IOException
     {
-        FileWriter fw = new FileWriter("Storage/channelData.json");
+        // creating path object
+        Path path = Path.of(extraPathUrl);
+        // creating the directory
+        Files.createDirectories(path);
+    }
+
+    private void setupData() throws IOException
+    {
+        File file = new File(DataUrl);
+        if (!file.exists())
+        {
+            file.createNewFile();
+            writeToData("{}");
+        }
+    }
+
+
+    private String readData() throws FileNotFoundException
+    {
+        File file = new File(DataUrl);
+        Scanner sc = new Scanner(file);
+        StringBuilder sb = new StringBuilder();
+
+        while (sc.hasNextLine())
+            sb.append(sc.nextLine());
+
+        return sb.toString();
+    }
+
+    public JsonObject getChannelData()
+    {
+        try
+        {
+            return new JsonParser().parse(readData()).getAsJsonObject();
+
+        } catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+
+    private void writeToData(String data) throws IOException
+    {
+        FileWriter fw = new FileWriter(DataUrl);
+        fw.write(data);
+        fw.close();
 
     }
+
     public void writeToFile(String data)
     {
         try
         {
-            writeData(data);
-        }
-        catch (IOException e)
+            writeToData(data);
+        } catch (IOException e)
         {
             e.printStackTrace();
         }
     }
 
-    public  JsonObject createDefaultObject(String channelID, int minutes)
+    public JsonObject createDefaultObject(String channelID, int minutes)
     {
         JsonArray arr = new JsonArray();
         JsonElement a = new JsonPrimitive(minutes);
@@ -87,15 +119,17 @@ public class ChannelManager
         return obj;
     }
 
-    public  void addToList(JsonObject channelObject)
+    public void addToList(JsonObject channelObject)
     {
-        JsonObject data = getData();
+        System.out.println(channelObject.toString());
+        JsonObject data = getChannelData();
         data.add(channelObject.get("ChannelId").getAsString(), channelObject);
 
+        writeToFile(data.toString());
 
     }
 
-    public  void removeFromList()
+    public void removeFromList()
     {
 
     }

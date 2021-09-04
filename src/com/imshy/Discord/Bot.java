@@ -1,5 +1,7 @@
 package com.imshy.Discord;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import com.imshy.Config;
 import com.imshy.Discord.Listeners.*;
 import com.imshy.Discord.Threads.TimelyT;

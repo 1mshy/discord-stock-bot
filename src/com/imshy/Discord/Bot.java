@@ -1,25 +1,22 @@
 package com.imshy.Discord;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
 import com.imshy.Config;
-import com.imshy.Discord.Listeners.*;
-import com.imshy.Discord.Threads.TimelyT;
+import com.imshy.Discord.Listeners.DataListener;
+import com.imshy.Discord.Listeners.Ping;
+import com.imshy.Discord.Listeners.StockListener;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
 import javax.security.auth.login.LoginException;
 
-public class Bot extends ListenerAdapter
-{
-    public void init(String token) throws LoginException, InterruptedException
-    {
+public class Bot extends ListenerAdapter {
+    public void init(String token) throws LoginException, InterruptedException {
         JDABuilder builder = JDABuilder.createDefault(token);
         builder.addEventListeners(
                 new StockListener(),
                 new Ping(),
-                new DailyListManager()
+                new DataListener()
         );
 
         JDA bot = builder.build().awaitReady();
@@ -30,5 +27,6 @@ public class Bot extends ListenerAdapter
         config.setDayChannel(bot.getTextChannelById(881305539722768436L));
 
 //        new TimelyT(3600).start();
+
     }
 }

@@ -6,7 +6,6 @@ import net.dv8tion.jda.api.entities.TextChannel;
 public class Config
 {
     static JDA bot;
-    static TextChannel dayChannel;
     static String[] args;
 
     public String[] getArgs()
@@ -28,17 +27,4 @@ public class Config
     {
         Config.bot = bot;
     }
-
-    public TextChannel getDayChannel()
-    {
-        return dayChannel;
-    }
-
-    public void setDayChannel(TextChannel dayChannel)
-    {
-        Config.dayChannel = dayChannel;
-    }
-
-
-
 }

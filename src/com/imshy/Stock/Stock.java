@@ -18,7 +18,7 @@ public abstract class Stock
     public String timeSeries;
     public StockPointData[] dayInfo;
     public StockPointData[] reversedDayInfo;
-    public String[] apikeys = {"8YCFRKRSFUDWJF7B", "CFLMYAONR8Y78KTL", "4M296R7OJ2BAS39F", "R3CBMFOAQZQ3K01J", "PE3HFJ05736ANVWO"};
+    public String[] apikeys = {"8YCFRKRSFUDWJF7B", "CFLMYAONR8Y78KTL", "4M296R7OJ2BAS39F", "R3CBMFOAQZQ3K01J", "PE3HFJ05736ANVWO", "LMTXRHO0WOIYNP3Z", "9CSMLZAJDTQJVM7W", "D4ML5TD98MM8GJWR", "INXOO4ACIJLSC89R", "TWOH8AIPFBQITIH7", "LS82YMQPGC2BXTGV", "QZ6OJSH79L5OEG9R"};
 
 
     public Stock()
@@ -95,6 +95,7 @@ public abstract class Stock
 
     public StockPointData[] getStockPointInfoArray()
     {
+        System.out.println(stockData);
         JsonObject timeSeriesData = stockData.get("Time Series (" + timeSeries + ")").getAsJsonObject();
         /*returns a map of the string and JsonElement for every key/value pair
          * this is then stored in a set*/

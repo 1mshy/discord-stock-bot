@@ -4,6 +4,7 @@ import com.imshy.Config;
 import com.imshy.Discord.Listeners.DataListener;
 import com.imshy.Discord.Listeners.Ping;
 import com.imshy.Discord.Listeners.StockListener;
+import com.imshy.Discord.Threads.TSendData;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
@@ -24,9 +25,8 @@ public class Bot extends ListenerAdapter {
         Config config = new Config();
 
         config.setBot(bot);
-        config.setDayChannel(bot.getTextChannelById(881305539722768436L));
 
-//        new TimelyT(3600).start();
+        new TSendData(3600).start();
 
     }
 }

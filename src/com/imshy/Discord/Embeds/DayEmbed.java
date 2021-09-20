@@ -4,6 +4,8 @@ import com.imshy.Stock.Stock;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 
+import java.util.List;
+
 public class DayEmbed
 {
     public MessageEmbed[] get(Stock[] stocks)
@@ -14,7 +16,12 @@ public class DayEmbed
         {
            messageEmbeds[i]=showStockEmbed.get(stocks[i]);
         }
-        System.out.println(messageEmbeds);
        return messageEmbeds;
+    }
+    public MessageEmbed[] get(List<Stock> stocks)
+    {
+        Stock[] s = new Stock[stocks.size()];
+        stocks.toArray(s);
+        return get(s);
     }
 }

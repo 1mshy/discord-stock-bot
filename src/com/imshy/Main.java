@@ -1,16 +1,10 @@
 package com.imshy;
 
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import com.imshy.Discord.Bot;
-import com.imshy.Discord.ChannelManager;
-import com.imshy.Discord.SendData;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
 import javax.security.auth.login.LoginException;
 import java.sql.Time;
-import java.util.HashMap;
-import java.util.Map;
 
 public class Main extends ListenerAdapter
 {

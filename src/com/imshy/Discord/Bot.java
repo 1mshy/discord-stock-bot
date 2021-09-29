@@ -26,7 +26,7 @@ public class Bot extends ListenerAdapter {
 
         config.setBot(bot);
 
-        new TSendData(3600).start();
+        new TSendData().start();
 
     }
 }

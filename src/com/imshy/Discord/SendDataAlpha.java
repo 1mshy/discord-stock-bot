@@ -10,15 +10,13 @@ import com.imshy.Stock.Stock;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.TextChannel;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
-public class SendData
+public class SendDataAlpha implements ISendData
 {
     public void sendData()
     {
+        // stock symbol / stock variable
         HashMap<String, Stock> sharedStockList = new HashMap<>();
         final DayEmbed dayEmbed = new DayEmbed();
         final ChannelManager cm = new ChannelManager();
@@ -29,8 +27,9 @@ public class SendData
         my storage system from start
 */
         // get the json object as an entry set
-        var x = cm.getChannelData().entrySet();
-        for (Map.Entry er : x)
+        Set<Map.Entry<String, JsonElement>> x = cm.getChannelData().entrySet();
+        int i = 1;
+        for (Map.Entry<String, JsonElement> er : x)
         {
             List<Stock> localStockList = new ArrayList<>();
             {
@@ -40,24 +39,38 @@ public class SendData
 //               This loop will get all stocks into the localStockList
                 for (JsonElement stockElement : ob.get("StockList").getAsJsonArray())
                 {
-                    // stock symbol is given as  "tsla" and transformed to tsla
+                    if(i!=0 && i%5==0 )
+                    {
+                        try
+                        {
+                            wait(303000);
+                        } catch (InterruptedException e)
+                        {
+                            e.printStackTrace();
+                        }
+                    }
+                    // stock symbol is given as  ""tsla"" and transformed to "tsla"
                     String stockSymbol = removeQuotes(stockElement.toString());
                     // try to find the stock symbol in the list of stocks
                     Stock stock = sharedStockList.get(stockSymbol);
+
+                    System.out.println(stock);
                     // if the stock was not found (null)
                     if (stock == null)
                     {
-                        System.out.println(stockSymbol);
+//                        System.out.println(stockSymbol);
                         stock = new DayStock(stockSymbol);
                         sharedStockList.put(stockSymbol, stock);
+
+                        i++;
                     }
 
                     localStockList.add(stock);
                 }
                 String channelId = removeQuotes(ob.get("ChannelId").toString());
-                System.out.println(channelId);
                 TextChannel textChannel = config.getBot().getTextChannelById(channelId);
                 MessageEmbed[] messageEmbeds = dayEmbed.get(localStockList);
+                
                 for (MessageEmbed embed : messageEmbeds)
                 {
 //                    making sure nothing is null
@@ -66,9 +79,14 @@ public class SendData
 
                     textChannel.sendMessage(embed).queue();
                 }
-
+                System.out.println(sharedStockList);
                 textChannel.sendMessage("◦━◦○◦━◦○◦━◦○◦━◦○◦━◦○◦━◦○◦━━◦○◦━◦○◦━◦○◦━◦").queue();
             }
+//            for(Stock s : localStockList)
+//            {
+//                sharedStockList.put(s.stockSymbol, s);
+//            }
+
         }
     }
     private String removeQuotes(String string)

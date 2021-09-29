@@ -35,6 +35,7 @@ public abstract class Stock
             jsonObject = JsonParser.parseString(request(stockUrl)).getAsJsonObject();
         } catch (Exception e)
         {
+
             System.out.println("The request to the url " + stockUrl + " from \"requestStockData\" has thrown an exception");
             jsonObject = null;
         }
